@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест</title>
+    <style>
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Страница 1</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="index.html">Главная</a></li>
+            <!-- Добавьте ссылки на остальные страницы сайта -->
+        </ul>
+    </nav>
+
+    <form id="quizForm">
+        <label>
+            Вопрос 1: Что такое закон сохранения энергии?
+            <br>
+            <input type="radio" name="q1" value="0"> А. Энергия не создаётся и не уничтожается, а только переходит из одной формы в другую.
+            <br>
+            <input type="radio" name="q1" value="1"> Б. Энергия создаётся только в атомных реакциях.
+            <br>
+            <input type="radio" name="q1" value="0"> В. Энергия всегда теряется при передаче от одного объекта к другому.
+            <br>
+            <input type="radio" name="q1" value="0"> Г. Энергия существует только в виде электричества.
+        </label>
+
+        <!-- Добавьте остальные вопросы аналогичным образом -->
+
+        <button type="button" onclick="submitQuiz()">Завершить тест</button>
+    </form>
+
+    <div id="result" style="display:none;">
+        <h2>Результаты</h2>
+        <p>Правильных ответов: <span id="score"></span></p>
+    </div>
+
+    <script>
+        function submitQuiz() {
+            const form = document.getElementById("quizForm");
+            const elements = form.elements;
+            let score = 0;
+
+            for (let i = 0; i < elements.length; i++) {
+                if (elements[i].type === "radio" && elements[i].checked) {
+                    score += parseInt(elements[i].value);
+                }
+            }
+
+            const resultDiv = document.getElementById("result");
+            const scoreSpan = document.getElementById("score");
+            scoreSpan.textContent = score;
+            resultDiv.style.display = "block";
+            window.scrollTo(0,document.body.scrollHeight);
+        }
+    </script>
+</body>
+</html>

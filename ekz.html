@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Статический сайт</title>
+    <style>
+        body {
+            background-color: rgb(192, 192, 238);
+            text-align: center;
+        }
+
+        .page {
+            display: none;
+            padding: 20px;
+            border: 1px solid black;
+        }
+
+        .pageTitle {
+            background-color: yellow;
+            font-weight: bold;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .question {
+            text-align: left;
+            margin: 10px;
+        }
+
+        .answers {
+            margin: 10px;
+        }
+
+        .answer {
+            margin: 5px;
+        }
+
+        #pageLinks {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pageLink {
+            margin: 10px;
+            font-size: 18px;
+        }
+
+        #testResult {
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        let correctAnswers = 0;
+
+        function createPages() {
+            const pageTitles = [
+                "Главная",
+                "Задачи",
+                "Форма регистрации",
+                "Форма обратной связи",
+                "Тест",
+                "Анимация",
+                "Модель",
+                "Видеоуроки",
+                "Книги",
+                "Об авторе"
+            ];
+
+            const pageContents = [
+                "Измерение массы тела методом гидростатического взвешивания",
+                "Содержание страницы 'Задачи'",
+                "Содержание страницы 'Форма регистрации'",
+                "Содержание страницы 'Форма обратной связи'",
+                "Содержание страницы 'Тест'",
+                "Содержание страницы 'Анимация'",
+                "Содержание страницы 'Модель'",
+                "Содержание страницы 'Видеоуроки'",
+                "Содержание страницы 'Книги'",
+                "Содержание страницы 'Об авторе'"
+            ];
+
+            for (let i = 0; i < pageTitles.length; i++) {
+                const page = document.createElement('div');
+                page.classList.add('page');
+                page.innerText = pageContents[i];
+                if (i === 0) {
+                    const title = document.createElement('div');
+                    title.classList.add('pageTitle');
+                    title.innerText = pageTitles[i];
+                    page.insertBefore(title, page.firstChild);
+                } else if (i === 4) {
+                    // Создаем тест на странице "Тест"
+                    createTest(page);
+                }
+                document.body.appendChild(page);
+                
+                const link = document.createElement('a');
+                link.href = '#';
+                link.classList.add('pageLink');
+                link.innerText = pageTitles[i];
+                link.onclick = function() {
+                    showPage(i);
+                };
+                document.getElementById('pageLinks').appendChild(link);
+            }
+        }
+
+        function createTest(page) {
+            const questions = [
+                {
+                    question: "Вопрос 1: Какой цвет у неба?",
+                    answers: ["Синий", "Зеленый", "Красный", "Желтый"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Вопрос 2: Сколько пальцев на руке?",
+                    answers: ["4", "5", "6", "7"],
+                    correctAnswer: 1
+                },
+                {
+                    question: "Вопрос 3: Какое животное мурлычет?",
+                    answers: ["Собака", "Кот", "Жираф", "Слон"],
+                    correctAnswer: 1
+                },
+                // Добавьте остальные вопросы здесь
+            ];
+
+            const testContainer = document.createElement('div');
+            testContainer.classList.add('question-container');
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.classList.add('question');
+                questionDiv.innerText = q.question;
+
+                const answersDiv = document.createElement('div');
+                answersDiv.classList.add('answers');
+                q.answers.forEach((answer, ansIndex) => {
+                    const answerLabel = document.createElement('label');
+                    answerLabel.classList.add('answer');
+                    const radioInput = document.createElement('input');
+                    radioInput.type = 'radio';
+                    radioInput.name = `question${index}`;
+                    radioInput.value = ansIndex;
+                    answerLabel.appendChild(radioInput);
+                    answerLabel.appendChild(document.createTextNode(answer));
+                    answersDiv.appendChild(answerLabel);
+                });
+
+                testContainer.appendChild(questionDiv);
+                testContainer.appendChild(answersDiv);
+            });
+
+            const finishButton = document.createElement('button');
+            finishButton.innerText = 'Завершить тест';
+            finishButton.onclick = function() {
+                calculateScore(questions);
+            };
+
+            testContainer.appendChild(finishButton);
+            page.appendChild(testContainer);
+        }
+
+        function calculateScore(questions) {
+            let score = 0;
+            questions.forEach((q, index) => {
+                const selectedAnswer = document.querySelector(`input[name="question${index}"]:checked`);
+                if (selectedAnswer) {
+                    const selectedValue = parseInt(selectedAnswer.value);
+                    if (selectedValue === q.correctAnswer) {
+                        score++;
+                    }
+                }
+            });
+
+            const resultContainer = document.getElementById('testResult');
+            resultContainer.innerText = `Правильных ответов: ${score} из ${questions.length}`;
+        }
+
+        function showPage(pageNumber) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(function(page, index) {
+                if (index === pageNumber) {
+                    page.style.display = 'block';
+                } else {
+                    page.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</head>
+<body onload="createPages()">
+    <div id="pageLinks"></div>
+    <div id="testResult"></div>
+</body>
+</html>
